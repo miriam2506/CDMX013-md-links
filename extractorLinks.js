@@ -2,12 +2,11 @@ const md = require('markdown-it')();
 //const { HttpStatusCode } = require('axios');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
-
 //const functionJsDom= jsdom.JSDOM
   
 const extractorLinks = (text)=>{
     let result = md.render(text);
-   console.log(result);
+//   console.log(result);
 
 const dom = new JSDOM(result);
 const query= dom.window.document.querySelectorAll("a");
@@ -32,7 +31,7 @@ else {
 
 })
 
-console.log(arrayClean)
+return(arrayClean)
 
 };
 

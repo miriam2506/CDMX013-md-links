@@ -6,7 +6,8 @@ const { validate } = require('./validateLinks.js');
 
 
 const readFileMd = (filePath, options) => {
-  console.log(filePath);
+  //console.log(filePath);
+//return new promisse función flecha que ejecutará tdo lo que está dentro de readfileMd y como, primer parametro resolve
 
   if (path.isAbsolute(filePath) === false) {
     // aca debo convertir a absoluta
@@ -16,20 +17,21 @@ const readFileMd = (filePath, options) => {
     let checkPath = fs.statSync(filePath);
     //early return
     if (checkPath.isDirectory()) {
-      console.log(TypeError);
+      //console.log(TypeError);
     }
     //else if(checkPath.isFile()){
     let otroPath = path.extname(filePath);
-    console.log(otroPath);
+    //console.log(otroPath);
     if (otroPath != ".md") {
-      console.log(TypeError);
+      //console.log(TypeError);
     }
 
     fs.readFile(filePath, 'utf-8', (err, data) => {
       if (err) {
-        console.log('error: ', err);
+      //  console.log('error: ', err);
       } else {
-   validate(extractorLinks(data));
+        validate(extractorLinks(data)).then(console.log);
+        
         //en un futuro esto cambia 
       }
     });
@@ -43,5 +45,5 @@ const readFileMd = (filePath, options) => {
 
 
 };
-readFileMd(filePath)
+ readFileMd(filePath)
 
