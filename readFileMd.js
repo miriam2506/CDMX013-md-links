@@ -2,6 +2,8 @@ const path = require('node:path');
 const fs = require('node:fs');
 const filePath = './README.md';
 const { extractorLinks } = require('./extractorLinks.js');
+const { validate } = require('./validateLinks.js');
+
 
 const readFileMd = (filePath, options) => {
   console.log(filePath);
@@ -27,7 +29,7 @@ const readFileMd = (filePath, options) => {
       if (err) {
         console.log('error: ', err);
       } else {
-        extractorLinks(data);
+   validate(extractorLinks(data));
         //en un futuro esto cambia 
       }
     });
