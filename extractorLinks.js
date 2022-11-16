@@ -1,45 +1,34 @@
-const md = require('markdown-it')();
-//const { HttpStatusCode } = require('axios');
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
-//const functionJsDom= jsdom.JSDOM
-  
-const extractorLinks = (text)=>{
-    let result = md.render(text);
-//   console.log(result);
+const md = require('markdown-it')()
+// const { HttpStatusCode } = require('axios');
+const jsdom = require('jsdom')
+const { JSDOM } = jsdom
+// const functionJsDom= jsdom.JSDOM
 
-const dom = new JSDOM(result);
-const query= dom.window.document.querySelectorAll("a");
-const arrayLinks = Array.apply(null, query); 
-const newArray= arrayLinks.map((a)=>{
-return a.getAttribute("href");
-})
+const extractorLinks = (text) => {
+  const result = md.render(text)
+  //   console.log(result);
 
-const arrayClean= newArray.filter((href)=>{
-    if (href.startsWith("http")){
+  const dom = new JSDOM(result)
+  const query = dom.window.document.querySelectorAll('a')
+  const arrayLinks = Array.apply(null, query)
+  // cómo obtener texto de link a partir de un nodo en js
+  const newArray = arrayLinks.map((a) => {
+    return a.getAttribute('href')
+  })
 
-    return true
-
+  const arrayClean = newArray.filter((href) => {
+    if (href.startsWith('http')) {
+      return true
+    } else {
+      return false
     }
+  })
 
-else {
-
-  return false
-
+  return (arrayClean)
 }
 
-
-})
-
-return(arrayClean)
-
-};
-
-
-{module.exports={
-    extractorLinks
+// eslint-disable-next-line no-lone-blocks
+{ module.exports = {
+  extractorLinks
 }
 }
-
-
-  
