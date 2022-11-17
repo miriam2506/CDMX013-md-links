@@ -1,46 +1,55 @@
 /* eslint-disable prefer-promise-reject-errors */
 const path = require('node:path')
 const fs = require('node:fs')
-// const filePath = ('./README.md')
-const filePath = process.argv[2]
+
 const { extractorLinks } = require('./extractorLinks.js')
 const { validate } = require('./validateLinks.js')
 
-// Función mdLinks
-const readFileMd = (filePath, options) => {
+const filePath = process.argv[2]
+// Meter en terminal la ruta
+
+// Función principal mdLinks
+const mdLinks = (filePath, options) => {
   // console.log(filePath);
   const newPromise = new Promise((resolve, reject) => {
     if (path.isAbsolute(filePath) === false) {
       // console.log (filePath);
       filePath = path.resolve(filePath)
-    }
-    if (fs.existsSync(filePath)) {
-      const checkPath = fs.statSync(filePath)
-      // early return
-      if (checkPath.isDirectory()) {
-        reject('Es una carpeta, por favor ingrese un archivo')
-      }
-      const otroPath = path.extname(filePath)
-      if (otroPath !== '.md') {
-        reject('No es  md')
+
+      if (fs.existsSync(filePath)) {
+        const checkPath = fs.statSync(filePath)
+        // early return
+        if (checkPath.isDirectory()) {
+          reject('Es una carpeta, por favor ingrese un archivo')
+        }
+        const extFile = path.extname(filePath)
+        if (extFile !== '.md') {
+          reject('El archivo no es md')
+        } else {
+        // se lee si es md y con utf 8 lo convierte en lenguaje de texto para depsues resolver la promesa ejecutando las funciones
+
+          // eslint-disable-next-line n/handle-callback-err
+          fs.readFile(filePath, 'utf-8', (error, data) => {
+            if (options.validate) {
+              resolve(validate(extractorLinks(data)))
+            } else {
+              resolve(extractorLinks(data))
+            }
+          })
+        }
       } else {
-        // eslint-disable-next-line n/handle-callback-err
-        fs.readFile(filePath, 'utf-8', (error, data) => {
-          if (options.validate) {
-            resolve(validate(extractorLinks(data)))
-          } else {
-            resolve(extractorLinks(data))
-          }
-        })
+        reject('El archivo NO EXISTE!')
       }
-    } else {
-      reject('El archivo NO EXISTE!')
     }
   })
+  // sólo se declara
   return newPromise
 }
-readFileMd(filePath, { validate: true }).then((result) => {
+
+// consume promesa con then cuando resuelve y catch error
+mdLinks(filePath, { validate: true }).then((result) => {
   console.log(result)
+  // Excepción
 }).catch((error) => {
   console.log(error)
 })

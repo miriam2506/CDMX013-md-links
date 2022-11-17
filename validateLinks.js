@@ -1,7 +1,12 @@
+
 /* eslint-disable no-lone-blocks */
+// traer respuesta http request del servidor
 const axios = require('axios')
 
+// a la hora que cumple promesa retorna objeto.
 const validate = (links) => {
+  // promise all recibe un arreglo de promesas y nos devuelve un arreglo de respuesrA
+  // itera con map en cada link para arrojar y devuelve el array de objetos con las propiedades
   return Promise.all(links.map((link) => {
     return axios.get(link)
       .then(response => {

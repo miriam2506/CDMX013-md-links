@@ -9,4 +9,4 @@
 })
 console.log(promise)
 promise.then(console.log).catch(console.log)
-+/
+*/
